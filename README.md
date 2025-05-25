@@ -22,14 +22,7 @@ Everything is containerized using **Docker Compose** and structured for easy dep
 ---
 
 ## 🏗️ Architecture Overview
-
-```
-
-+---------+        +------------+        +-----------+
-\|  Client | <--> |   Nginx    | <--> |   Django   | <--> | MySQL DB |
-+---------+        +------------+        +-----------+
-
-```
+![Architecture Diagram](Architecture.png)
 
 ## 📁 Project Structure
 
