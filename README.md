@@ -1,4 +1,4 @@
-# 🚀 Docker Project: Three-Tier Notes App which is a Django Application with MySQL and Nginx (Dockerized on AWS EC2)
+# 🚀 Docker Project: Three-Tier Notes App with Django, MySQL, Nginx, and Jenkins CI/CD (Dockerized on AWS EC2)
 
 This project demonstrates a **production-ready three-tier web application** using:
 - **Django** as the web framework for the Notes app
@@ -41,6 +41,7 @@ Docker-3Tier-Project/
 ├── db.sqlite3 # (Optional) SQLite fallback DB (ignored in prod)
 ├── docker-compose.yml # Docker Compose configuration
 ├── Dockerfile # Dockerfile for Django app
+├── Jenkinsfile # Jenkinsfile for CI/CD Pipeline
 ├── manage.py # Django's entry point
 ├── README.md # You're here!
 └── requirements.txt # Python dependencies
@@ -153,6 +154,45 @@ You can also access the Django admin:
 ```text
 http://<EC2-Public-IP>/admin
 ```
+
+---
+
+## ⚙️ Jenkins CI/CD Pipeline
+
+To automate the build, push, and deployment of this application, a Jenkins pipeline is integrated using the `Jenkinsfile` in the root directory. This enables **continuous integration and delivery** for every push to the main branch.
+
+### 🧪 Pipeline Overview
+
+| Stage         | Description                                                                 |
+|---------------|-----------------------------------------------------------------------------|
+| **Clone Code**| Clones the latest code from the GitHub repository                           |
+| **Build**     | Builds the Docker image for the Django app                                  |
+| **Push**      | Tags and pushes the image to Docker Hub using secured Jenkins credentials   |
+| **Deploy**    | Stops existing containers and redeploys using `docker-compose`              |
+
+---
+
+### 🛠️ Jenkins Setup Tips
+
+- ✅ **Install Required Plugins**:
+  - Docker Pipeline  
+  - GitHub Integration  
+  - Credentials Binding  
+
+- 🔐 **Docker Hub Credentials**:
+  - Add credentials with ID: `dockerHub`  
+  - Type: *Username with password*  
+  - Used in `withCredentials` block for secure authentication  
+
+- 📂 **Jenkinsfile Location**:
+  - Ensure the `Jenkinsfile` is placed at the root of the GitHub repository  
+
+---
+
+### 🔄 Triggering Builds
+
+- **Manual**: From the Jenkins dashboard  
+- **Automatic**: Configure **GitHub Webhooks** to trigger builds on `push` events to the `main` branch  
 
 ---
 
