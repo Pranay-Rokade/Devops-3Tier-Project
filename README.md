@@ -1,4 +1,4 @@
-# 🚀 Docker Project: Three-Tier Notes App with Django, MySQL, Nginx, and Jenkins CI/CD (Dockerized on AWS EC2)
+# 🚀 Devops Project: Three-Tier Notes App with Django, MySQL, Nginx, and Jenkins CI/CD (Dockerized on AWS EC2)
 
 This project demonstrates a **production-ready three-tier web application** using:
 - **Django** as the web framework for the Notes app
@@ -28,8 +28,12 @@ Everything is containerized using **Docker Compose** and structured for easy dep
 
 ```
 
-Docker-3Tier-Project/
+Devops-3Tier-Project/
 ├── api/
+├──k8s/
+│ └── namespace.yml
+│ └── deployment.yml
+│ └── service.yml
 ├── mynotes/ # Frontend 
 ├── nginx/
 │ └── default.conf # Nginx reverse proxy configuration
@@ -74,7 +78,7 @@ Docker-3Tier-Project/
 
 ```bash
 # Clone the repository
-git clone https://github.com/Pranay-Rokade/Docker-3Tier-Project
+https://github.com/Pranay-Rokade/Devops-3Tier-Project.git
 cd Docker-3Tier-Project
 
 # Build and run all containers
@@ -112,7 +116,7 @@ sudo systemctl enable docker
 4. **Deploy the Application**:
 
 ```bash
-git clone https://github.com/Pranay-Rokade/Docker-3Tier-Project
+git clone https://github.com/Pranay-Rokade/Devops-3Tier-Project
 cd Docker-3Tier-Project
 docker-compose up --build -d
 ```
