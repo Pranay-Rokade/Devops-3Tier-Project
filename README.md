@@ -1,4 +1,4 @@
-# 🚀 Docker Project: Three-Tier Notes App with Django, MySQL, Nginx, and Jenkins CI/CD (Dockerized on AWS EC2)
+# 🚀 DevOps Project: Three-Tier Notes App with Django, MySQL, Nginx, Jenkins CI/CD & Kubernetes (Dockerized on AWS EC2 with KIND)
 
 This project demonstrates a **production-ready three-tier web application** using:
 - **Django** as the web framework for the Notes app
@@ -28,8 +28,12 @@ Everything is containerized using **Docker Compose** and structured for easy dep
 
 ```
 
-Docker-3Tier-Project/
+Devops-3Tier-Project/
 ├── api/
+├──k8s/
+│ └── namespace.yml
+│ └── deployment.yml
+│ └── service.yml
 ├── mynotes/ # Frontend 
 ├── nginx/
 │ └── default.conf # Nginx reverse proxy configuration
@@ -74,7 +78,7 @@ Docker-3Tier-Project/
 
 ```bash
 # Clone the repository
-git clone https://github.com/Pranay-Rokade/Docker-3Tier-Project
+https://github.com/Pranay-Rokade/Devops-3Tier-Project.git
 cd Docker-3Tier-Project
 
 # Build and run all containers
@@ -112,7 +116,7 @@ sudo systemctl enable docker
 4. **Deploy the Application**:
 
 ```bash
-git clone https://github.com/Pranay-Rokade/Docker-3Tier-Project
+git clone https://github.com/Pranay-Rokade/Devops-3Tier-Project
 cd Docker-3Tier-Project
 docker-compose up --build -d
 ```
@@ -154,6 +158,93 @@ You can also access the Django admin:
 ```text
 http://<EC2-Public-IP>/admin
 ```
+
+---
+
+## ☸️ Kubernetes Deployment using KIND on EC2
+
+In addition to Docker Compose, this project also supports deployment via Kubernetes using Kind (Kubernetes IN Docker), a lightweight local Kubernetes cluster.
+
+### 📦 Environment: AWS EC2 + KIND
+
+The Kubernetes cluster was set up on an EC2 instance using the following:
+
+- **AMI**: Ubuntu 24.04 LTS  
+- **Instance Type**: t2.micro (or higher)  
+- **Tools Installed**: docker.io, kind, kubectl  
+
+### 🛠️ Setup Steps on EC2
+
+#### ✅ 1. Install Docker
+
+```bash
+sudo apt update
+sudo apt install -y docker.io
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+#### ✅ 2. Install KIND
+
+```bash
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+```
+
+#### ✅ 3. Install kubectl
+
+```bash
+curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+```
+
+#### ✅ 4. Create Kind Cluster
+
+```bash
+kind create cluster --name notes-cluster
+```
+
+### 📄 Kubernetes Manifests
+
+The Kubernetes manifests are located inside the `k8s/` directory:
+
+```
+k8s/
+├── namespace.yml     # Namespace definition for isolation
+├── deployment.yml    # Deploys the Django app container
+├── service.yml       # Exposes Django app inside the cluster
+```
+
+You can apply them using:
+
+```bash
+kubectl apply -f k8s/namespace.yml
+kubectl apply -f k8s/deployment.yml
+kubectl apply -f k8s/service.yml
+```
+
+### 🌐 Accessing the Application (Port Forwarding)
+
+To expose the Django app running inside the Kubernetes cluster:
+
+```bash
+kubectl port-forward service/notes-app-service -n notes-app 8000:8000 --address=0.0.0.0
+```
+
+Now visit your browser at:
+
+```
+http://<EC2-Public-IP>:8000/
+```
+
+### 🔐 Notes & Suggestions
+
+- ✅ Consider setting up an Ingress Controller (e.g., Nginx Ingress) for production routing  
+- 🔐 Use Secrets for DB passwords and sensitive env variables  
+- 💾 Use PersistentVolumes if you migrate MySQL to K8s  
+- 📦 Use Helm for templating and better config management (optional)  
 
 ---
 
